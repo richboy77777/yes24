@@ -16,7 +16,7 @@
 		, a.ifmmName
 		, a.ifmmDelNy
 		FROM
-			bts.infrMember a
+			yes24.infrMember a
 		WHERE 1=1
 			<choose>
 				<when test="shIfmmDelNy == 1"> AND ifmmDelNy = 1</when>
@@ -37,14 +37,14 @@
 		)
 	</insert>
 	
-		<select id="selectOne" resultMap="resultMapObj">
+	<select id="selectOne" resultMap="resultMapObj">
 		SELECT
 		a.ifmmSeq
 		, a.ifmmId
 		, a.ifmmName
 		, a.ifmmDelNy
 		FROM 
-			bts.infrMember a
+			yes24.infrMember a
 		WHERE 1=1
 			AND ifmmSeq = #{ifmmSeq}
 	</select>
@@ -56,5 +56,17 @@
 		WHERE 1=1
 			AND ifmmSeq = #{ifmmSeq}
 	</update>
+	
+	<select id="selectOneLogin" resultMap="resultMapObj">
+		SELECT
+		a.ifmmSeq
+		, a.ifmmId
+		, a.ifmmPassword
+		FROM 
+			yes24.infrMember a
+		WHERE 1=1
+			AND ifmmId = #{ifmmId}
+			AND ifmmPassword = #{ifmmPassword}
+	</select>
 
 </mapper>

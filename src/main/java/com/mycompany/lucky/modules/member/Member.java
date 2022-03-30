@@ -5,6 +5,7 @@ public class Member {
 	private String ifmmSeq = "";
 	private String ifmmId = "";
 	private String ifmmName= "";
+	private String ifmmPassword= "";
 	private Integer ifmmDelNy;
 //------------
 	public String getIfmmSeq() {
@@ -31,5 +32,12 @@ public class Member {
 	public void setIfmmDelNy(Integer ifmmDelNy) {
 		this.ifmmDelNy = ifmmDelNy;
 	}
+	public String getIfmmPassword() {
+		return ifmmPassword;
+	}
+	public void setIfmmPassword(String ifmmPassword) {
+		this.ifmmPassword = ifmmPassword;
+	}
 
+	
 }

@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="rb" uri="http://www.springframework.org/tags" %>
 
-<form id="" name="" method="get" action="/lucky/member/memberList">
+
 
 <!DOCTYPE HTML>
 <html lang="ko">
@@ -77,54 +77,26 @@
 </head>
 
 <body>
-
+	<form id="" name="" method="get" action="/lucky/member/memberList">
 	<!--  -->
 	<div class="container-fluid">
-
+	
 		<div class="row">
-			<div class="col-4 col-sm-2 my-auto">
-				<a href="memberList.html"> <img
-					src="../../../images/xdmin/member/yes24logo.png">
+			<div class="col-4 my-auto">
+				<a href="/lucky/member/memberList"> 
+				<img src="../../../resources/xdmin/image/yes24logo.png"/>
 				</a>
 			</div>
-			<div class="col-sm-4 my-auto d-none d-sm-block"></div>
+			<div class="col-4"></div>
 
-			<div class="col-4 col-sm-2 my-auto text-end">
-				<a class="btn btn-primary d-block d-sm-none"
-					data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-					aria-controls="offcanvasExample" style="font-size: 0.3rem"> 목록
-				</a>
-
-				<div class="offcanvas offcanvas-start" tabindex="-1"
-					id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-					<div class="offcanvas-header">
-						<h5 class="offcanvas-title" id="offcanvasExampleLabel">목록</h5>
-						<button type="button" class="btn-close text-reset"
-							data-bs-dismiss="offcanvas" aria-label="Close"></button>
-					</div>
-					<div class="offcanvas-body">
-						<div>장르별구분</div>
-						<div class="dropdown mt-3">
-							<button class="btn btn-secondary dropdown-toggle" type="button"
-								id="dropdownMenuButton" data-bs-toggle="dropdown">장르클릭
-							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<li><a class="dropdown-item" href="#">소설</a></li>
-								<li><a class="dropdown-item" href="#">인문</a></li>
-								<li><a class="dropdown-item" href="#">만화</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
+			<div class="col-1 my-auto">
+				<img src="../../../resources/xdmin/image/tomcru.png"/>
 			</div>
-			<div class="col-sm-1 my-auto d-none d-sm-block">
-				<img src="../../../images/xdmin/member/tomcru.png">
-			</div>
-
-			<div class="col-sm-2 my-auto text-end d-none d-sm-block">
+			
+			<div class="col-2 my-auto text-end">
 				SANGWON LEE<br>Administrator
 			</div>
-			<div class="col-sm-1 my-auto text-end d-none d-sm-block">
+			<div class="col-1 my-auto text-end">
 				<form action="" method="get" id="" name=""
 					enctype="multipart/form-data">
 					<select id="" name="select">
@@ -137,7 +109,6 @@
 					</select>
 				</form>
 			</div>
-
 		</div>
 
 
@@ -347,21 +318,30 @@
 		</table>
 	</form>	
 	
-		<nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="#"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
-				<li class="page-item"><a class="page-link" href="#">4</a></li>
-				<li class="page-item"><a class="page-link" href="#">5</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</ul>
-		</nav>
+<c:out value="${vo.startPage}"/>
+
+<nav aria-label="...">
+  <ul class="pagination">
+  
+    <c:if test="${vo.startPage gt vo.pageNumToShow}">
+                <li class="page-item"><a class="page-link" href="/lucky/member/memberList?thisPage=${vo.startPage - 1}&shIfcgDelNy=<c:out value="${vo.shIfcgDelNy }"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>">Previous</a></li>
+</c:if>
+<c:forEach begin="${vo.startPage}" end="${vo.endPage}" varStatus="i">
+	<c:choose>
+		<c:when test="${i.index eq vo.thisPage}">
+                <li class="page-item active"><a class="page-link" href="/lucky/member/memberList?thisPage=${i.index}&shIfcgDelNy=<c:out value="${vo.shIfcgDelNy }"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>">${i.index}</a></li>
+		</c:when>
+		<c:otherwise>             
+                <li class="page-item"><a class="page-link" href="/lucky/member/memberList?thisPage=${i.index}&shIfcgDelNy=<c:out value="${vo.shIfcgDelNy }"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>">${i.index}</a></li>
+		</c:otherwise>
+	</c:choose>
+</c:forEach>     
+<c:if test="${vo.endPage ne vo.totalPages}">                
+                <li class="page-item"><a class="page-link" href="/lucky/member/memberList?thisPage=${vo.endPage + 1}&shIfcgDelNy=<c:out value="${vo.shIfcgDelNy }"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>">Next</a></li>
+</c:if> 
+
+  </ul>
+</nav>
 	</div>
 </div>
 
@@ -380,7 +360,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/6ddd8200f3.js"
 	crossorigin="anonymous"></script>
-
+</form>
 </body>
 </html>
-</form>

@@ -32,4 +32,8 @@ public class MemberDao {
 		return sqlSession.update(namespace + ".update", dto);
 	}
 	
+	public Member selectOneLogin(Member dto) {
+		return sqlSession.selectOne(namespace + ".selectOneLogin",dto);
+	}
+	
 }
