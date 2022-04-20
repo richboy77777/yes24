@@ -8,60 +8,196 @@
 
 	<resultMap id="resultMapObj"
 		type="com.mycompany.lucky.modules.member.Member"></resultMap>
+	
+	<sql id="selectCommon">
+		FROM
+		infrMember a
+		LEFT OUTER JOIN yes24.infrMemberEmail AS b ON b.ifmmSeq = a.ifmmSeq and ifmeDefaultNy = 1
+		LEFT OUTER JOIN yes24.infrMemberPhone AS c ON c.ifmmSeq = a.ifmmSeq and ifmpDefaultNy = 1
+		WHERE 1=1
+		<choose>
+			<when test="shOption == 1"> AND ifmmId LIKE concat('%',#{shValue},'%')</when>
+			<when test="shOption == 2"> AND ifmmName LIKE concat('%',#{shValue},'%')</when>
+		</choose>
+		<choose>
+			<when test="shIfDelNy == 1"> AND ifmmDelNy = 1</when>
+			<when test="shIfDelNy == 0"> AND ifmmDelNy = 0</when>
+		</choose>
+		<choose>
+			<when test="shOptionDate == 1">AND a.regDateTime BETWEEN #{shDateStart} AND #{shDateEnd}</when>
+			<when test="shOptionDate == 2">AND a.modDateTime BETWEEN #{shDateStart} AND #{shDateEnd}</when>
+			<when test="shOptionDate == 3">AND a.ifmmDob BETWEEN #{shDateStart} AND #{shDateEnd}</when>
+		</choose>
+	</sql>
+	
+	<select id="selectOneCount" resultType="Integer">
+		SELECT
+			count(*)
+		<include refid="selectCommon" />
+	</select>
 
 	<select id="selectList" resultMap="resultMapObj">
 		SELECT
 		a.ifmmSeq
 		, a.ifmmId
 		, a.ifmmName
+		, a.ifmmPassword
+		, a.ifmmDob
 		, a.ifmmDelNy
-		FROM
-			yes24.infrMember a
-		WHERE 1=1
-			<choose>
-				<when test="shIfmmDelNy == 1"> AND ifmmDelNy = 1</when>
-				<when test="shIfmmDelNy == 0"> AND ifmmDelNy = 0</when>
-			</choose>
-			<if test="shIfmmName != null and !shIfmmName.equals('')"> AND ifmmName LIKE concat('%',#{shIfmmName},'%')</if>	
+		, a.regDateTime
+		, a.modDateTime
+		, b.ifmeEmailFull
+		, c.ifmpNumber
+		<include refid="selectCommon" />
+		limit ${startRnumForMysql}, ${rowNumToShow}	
 	</select>
 
 	<insert id="insert">
 		INSERT INTO infrMember (
 		ifmmId
 		,ifmmName
+		,ifmmPassword
+		,ifmmDob
 		,ifmmDelNy
 		) values (
 		#{ifmmId}
 		,#{ifmmName}
+		,#{ifmmPassword}
+		,#{ifmmDob}
 		,0
 		)
+		<selectKey resultType="String" keyProperty="ifmmSeq" order="AFTER">	<!-- 이 쿼리문은 서비스임플에서 인서트 멤버dto 내용이 다른 멤버dto 내용으로 넘어갈때 ifmmSeq도 자동 맵핑해서 넘어가게 해줌 -->
+			SELECT last_insert_id()	
+		</selectKey>
 	</insert>
+	
+	<insert id="insertMemberPhone">
+		insert into infrMemberPhone(
+		ifmpNumber
+		,ifmpDefaultNy
+		,ifmpDelNy
+		,ifmmSeq
+		)
+		values (
+		#{ifmpNumber}
+		,1
+		,0
+		,#{ifmmSeq}
+		)
+	</insert>
+		
+	<insert id="insertMemberEmail">
+		insert into infrMemberEmail(
+		ifmeEmailFull
+		,ifmeDefaultNy
+		,ifmeDelNy
+		,ifmmSeq
+		)
+		values (
+		#{ifmeEmailFull}
+		,1
+		,0
+		,#{ifmmSeq}
+		)
+	</insert>
+	
+	<insert id="insertMemberAddress">
+		insert into infrMemberAddress (
+		ifmaLat
+		,ifmaLng
+		,ifmmSeq
+		,ifmaDefaultNy
+		,ifmaDelNy
+		)
+		values (
+		#{ifmaLat}
+		#{ifmaLng}
+		#{ifmmSeq}
+		,1
+		,0
+		)
+	</insert>	
 	
 	<select id="selectOne" resultMap="resultMapObj">
 		SELECT
 		a.ifmmSeq
 		, a.ifmmId
 		, a.ifmmName
+		, a.ifmmPassword
+		, a.ifmmDob
 		, a.ifmmDelNy
-		FROM 
+		, b.ifmeEmailFull
+		, c.ifmpNumber 
+		, d.ifmaLat
+		, d.ifmaLng
+		FROM
 			yes24.infrMember a
-		WHERE 1=1
-			AND ifmmSeq = #{ifmmSeq}
-	</select>
-	
+			LEFT OUTER JOIN yes24.infrMemberEmail AS b ON b.ifmmSeq = a.ifmmSeq and ifmeDefaultNy = 1
+			LEFT OUTER JOIN yes24.infrMemberPhone AS c ON c.ifmmSeq = a.ifmmSeq and ifmpDefaultNy = 1
+			LEFT OUTER JOIN yes24.infrMemberAddress AS d ON d.ifmmSeq = a.ifmmSeq and ifmaDefaultNy = 1
+		 WHERE 1=1 
+			AND a.ifmmSeq = #{ifmmSeq}
+	</select>	
+			
 	<update id="update">
 		UPDATE infrMember SET 
 		 	ifmmId = #{ifmmId}
 			, ifmmName = #{ifmmName}
+			, ifmmPassword = #{ifmmPassword}
+			, ifmmDob = #{ifmmDob}
 		WHERE 1=1
 			AND ifmmSeq = #{ifmmSeq}
 	</update>
+	
+	<update id="updateMemberPhone">
+		UPDATE infrMemberPhone SET 
+		 	ifmpNumber = #{ifmpNumber}
+		WHERE 1=1
+			AND ifmmSeq = #{ifmmSeq}
+	</update>
+	
+	<update id="updateMemberEmail">
+		UPDATE infrMemberEmail SET 
+		 	ifmeEmailFull = #{ifmeEmailFull}
+		WHERE 1=1
+			AND ifmmSeq = #{ifmmSeq}
+	</update>
+	
+	<update id="updateDelete">
+		UPDATE infrMember SET ifmmDelNy = 1 
+		WHERE
+		1=1
+		AND ifmmSeq = #{ifmmSeq}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM infrMember
+		WHERE
+		1=1
+		AND ifmmSeq = #{ifmmSeq}
+	</delete>
+	
+	<delete id="deleteMemberPhone">
+		DELETE FROM infrMemberPhone
+		WHERE
+		1=1
+		AND ifmmSeq = #{ifmmSeq}
+	</delete>
+	
+	<delete id="deleteMemberEmail">
+		DELETE FROM infrMemberEmail
+		WHERE
+		1=1
+		AND ifmmSeq = #{ifmmSeq}
+	</delete>
+	
 	
 	<select id="selectOneLogin" resultMap="resultMapObj">
 		SELECT
 		a.ifmmSeq
 		, a.ifmmId
 		, a.ifmmPassword
+		, a.ifmmName
 		FROM 
 			yes24.infrMember a
 		WHERE 1=1

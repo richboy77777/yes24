@@ -25,4 +25,20 @@
 	
 	
 	
+	<!-- session interceptor s 2022.03.13 for logincheck -->
+ 	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/resources/**" />
+			<exclude-mapping path="/member/loginForm" />
+			<exclude-mapping path="/member/loginProc" />
+			<exclude-mapping path="/member/GloginProc" />
+			<exclude-mapping path="/member/KakaoLgProc" />
+			<exclude-mapping path="/member/FBLgProc" />
+			<beans:bean id="CheckLoginSessionInterception" class="com.mycompany.lucky.common.interceptor.CheckLoginSessionInterception"/>
+		</interceptor>
+	</interceptors>	 
+	<!-- session interceptor e 2022.03.13 for logincheck -->
+	
+	
 </beans:beans>

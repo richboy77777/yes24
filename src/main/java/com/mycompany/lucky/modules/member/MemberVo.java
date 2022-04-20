@@ -6,8 +6,15 @@ public class MemberVo {
 	private String ifmmSeq;
 
 //	infrmember Search
+	private String shIfmmId;
 	private String shIfmmName;
-	private Integer shIfmmDelNy;
+	private Integer shIfDelNy;
+	
+//  Date	
+	private String shDateStart;
+	private String shDateEnd;
+	private Integer shOptionDate;
+	
 	
 //	common
 	private String shOption;
@@ -58,7 +65,7 @@ public class MemberVo {
 		if (startRnumForOracle < 1)
 			startRnumForOracle = 1;
 
-		if (thisPage == 1) {
+		if (thisPage == 1 || thisPage == 0) {
 			startRnumForMysql = 0;
 		} else {
 			startRnumForMysql = ((rowNumToShow * (thisPage - 1)));
@@ -84,6 +91,14 @@ public class MemberVo {
 		this.ifmmSeq = ifmmSeq;
 	}
 
+	public String getShIfmmId() {
+		return shIfmmId;
+	}
+
+	public void setShIfmmId(String shIfmmId) {
+		this.shIfmmId = shIfmmId;
+	}
+
 	public String getShIfmmName() {
 		return shIfmmName;
 	}
@@ -92,12 +107,12 @@ public class MemberVo {
 		this.shIfmmName = shIfmmName;
 	}
 
-	public Integer getShIfmmDelNy() {
-		return shIfmmDelNy;
+	public Integer getShIfDelNy() {
+		return shIfDelNy;
 	}
 
-	public void setShIfmmDelNy(Integer shIfmmDelNy) {
-		this.shIfmmDelNy = shIfmmDelNy;
+	public void setShIfDelNy(Integer shIfDelNy) {
+		this.shIfDelNy = shIfDelNy;
 	}
 
 	public String getShOption() {
@@ -203,6 +218,32 @@ public class MemberVo {
 	public void setStartRnumForMysql(Integer startRnumForMysql) {
 		this.startRnumForMysql = startRnumForMysql;
 	}
+
+	public String getShDateStart() {
+		return shDateStart;
+	}
+
+	public void setShDateStart(String shDateStart) {
+		this.shDateStart = shDateStart;
+	}
+
+	public String getShDateEnd() {
+		return shDateEnd;
+	}
+
+	public void setShDateEnd(String shDateEnd) {
+		this.shDateEnd = shDateEnd;
+	}
+
+	public Integer getShOptionDate() {
+		return shOptionDate;
+	}
+
+	public void setShOptionDate(Integer shOptionDate) {
+		this.shOptionDate = shOptionDate;
+	}
+
+
 	
 	
 	

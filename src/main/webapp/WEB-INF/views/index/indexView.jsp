@@ -33,21 +33,19 @@
 		<div class="row">
 			<div class="col-4 my-auto">
 				<a href="/lucky/member/memberList"> 
-				<img src="../../../resources/xdmin/image/yes24logo.png"/>
+				<img src="/lucky/resources/xdmin/image/yes24logo.png"/>
 				</a>
 			</div>
 			<div class="col-4"></div>
 
 			<div class="col-1 my-auto">
-				<img src="../../../resources/xdmin/image/tomcru.png"/>
+				<img src="/lucky/resources/xdmin/image/tomcru.png"/>
 			</div>
 			
 			<div class="col-2 my-auto text-end">
 				SANGWON LEE<br>Administrator
 			</div>
 			<div class="col-1 my-auto text-end">
-				<form action="" method="get" id="" name=""
-					enctype="multipart/form-data">
 					<select id="" name="select">
 						<optgroup label="언어">
 							<option value="lang">언어
@@ -56,7 +54,6 @@
 							<option value="JPN">일본어
 						</optgroup>
 					</select>
-				</form>
 			</div>
 		</div>
 
@@ -79,13 +76,14 @@
 				</div>
 			</div>
 		</nav>
-		
-		<div>sessSeq : 1</div>
-		<div>sessName : 스펀지송</div>
-		<div>sessId : xdmin</div>
-		<div>
-			<button type="button" class="btn btn-primary">logout</button>
-		</div>
+		<br>
+		<br>
+sessSeq: <c:out value="${sessSeq }"/><br>
+sessName: <c:out value="${sessName }"/><br>
+sessId: <c:out value="${sessId }"/><br>
+<c:if test="${not empty sessSeq}">
+	<button type="button" class="btn btn-danger btn-sm" name="" id="btnLogout"><i class="fa-solid fa-power-off"></i></button>
+</c:if>
 </div>
 
 
@@ -102,8 +100,33 @@
 <!-- javascript -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script src="https://kit.fontawesome.com/6ddd8200f3.js"
-	crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/6ddd8200f3.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+<script type = "text/javascript">
+$("#btnLogout").on("click", function() {
+	$.ajax({
+			async: true 
+			,cache: false
+			,type: "post"
+			,url: "/lucky/member/logOutProc"
+			//,data : { "ifmmId" : $("#ifmmId").val(), "ifmmPassword" : $("#ifmmPassword").val()}
+			,success: function(response) {
+				if(response.rt == "success") {
+					location.href = "/lucky/member/loginForm";
+				}
+			}
+			,error : function(jqXHR, textStatus, errorThrown){
+				alert("ajaxUpdate " + jqXHR.textStatus + " : " + jqXHR.errorThrown);
+			}
+		});
+});	
+</script>
+
+
+
+
 </form>
 </body>
 </html>
